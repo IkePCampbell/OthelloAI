@@ -212,7 +212,8 @@ class Board:
             if startY < flipY:
                 y +=1
             self.board[y][x] = acolor
-                            
+                 
+                             
     def score(self):
         blackScore = 0
         for rows in self.board:
