@@ -27,7 +27,7 @@ currentPlayer = playerList[start]
 currentPlayerIndex = start
 while(playing):
     gameBoard.printBoard()
-    print('Its',currentPlayer.playerName+"'s turn!")
+    print('Its',currentPlayer.playerName+"'s turn! ("+currentPlayer.tokenColor+")")
     moveList,canMove = gameBoard.canMove(currentPlayer.tokenColor)
     invalid = True
     print(moveList)
@@ -40,7 +40,6 @@ while(playing):
             invalid = False
     gameBoard.moves(tokenYCoord,tokenXCoord,currentPlayer.tokenColor,'flip')
     #switch players
-    gameBoard.printBoard()
     if currentPlayerIndex == 0:
         currentPlayerIndex = 1
     else:
