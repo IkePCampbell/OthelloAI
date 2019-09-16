@@ -4,8 +4,8 @@ class Board:
         ['x','x','x','x','x','x','x','x'],
         ['x','x','x','x','x','x','x','x'],
         ['x','x','x','x','x','x','x','x'],
-        ['x','x','x','B','W','x','x','x'],
-        ['x','x','x','W','B','x','x','x'],
+        ['x','x','x','B','W','W','W','x'],
+        ['x','x','x','x','x','x','x','x'],
         ['x','x','x','x','x','x','x','x'],
         ['x','x','x','x','x','x','x','x'],   
         ['x','x','x','x','x','x','x','x'],     ]
@@ -50,8 +50,6 @@ class Board:
                 self.flip(aY,aX,aY,aX-(spot),acolor)
 
         rightOf = self.board[aY][aX+1:] #have to add 1 to not include the original
-        if len(rightOf) > 0:
-            rightOf.pop()
         if mode == 'get':
             keepGoing,spot= self.keepGoingMoves(rightOf,'x',enemy)
             if keepGoing:
