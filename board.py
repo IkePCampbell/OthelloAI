@@ -41,25 +41,24 @@ class Board:
         leftOf = self.board[aY][:aX]
         leftOf.reverse()
         if mode == 'get':
-            keepGoing,spot = self.keepGoingMoves(leftOf,enemy)
+            keepGoing,spot = self.keepGoingMoves(leftOf,'x',enemy)
             if keepGoing:
                 possibleMoves.append([aY,aX-(spot+1)])
         else:
-            spot = self.getOpenSpot(leftOf,acolor)
-            print(leftOf, spot)
-            if spot > 0:
+            keepGoing,spot = self.keepGoingMoves(leftOf,acolor,enemy)
+            if keepGoing:
                 self.flip(aY,aX,aY,aX-(spot),acolor)
 
         rightOf = self.board[aY][aX+1:] #have to add 1 to not include the original
         if len(rightOf) > 0:
             rightOf.pop()
         if mode == 'get':
-            keepGoing,spot= self.keepGoingMoves(rightOf,enemy)
+            keepGoing,spot= self.keepGoingMoves(rightOf,'x',enemy)
             if keepGoing:
                 possibleMoves.append([aY,aX+(spot+1)])
         else:
-            spot = self.getOpenSpot(rightOf,acolor)
-            if spot > 0:
+            keepGoing,spot= self.keepGoingMoves(rightOf,acolor,enemy)
+            if keepGoing:
                 self.flip(aY,aX,aY,aX+(spot),acolor)
 
         aboveOf = []
@@ -67,26 +66,24 @@ class Board:
             aboveOf.append(self.board[i][aX])
         aboveOf.reverse()
         if mode == 'get':
-            keepGoing,spot  = self.keepGoingMoves(aboveOf,enemy)
+            keepGoing,spot  = self.keepGoingMoves(aboveOf,'x',enemy)
             if keepGoing:
                 possibleMoves.append([aY-(spot+1),aX])
         else:
-            print(aboveOf, spot)
-            spot = self.getOpenSpot(aboveOf,acolor)
-            if spot > 0:
+            keepGoing,spot = self.keepGoingMoves(aboveOf,acolor,enemy)
+            if keepGoing:
                 self.flip(aY,aX,aY-(spot),aX,acolor)
 ##################################################################################
         belowOf = []
         for i in range(aY+1,len(self.board)): #get all possible spots above you
             belowOf.append(self.board[i][aX])
         if mode == 'get':
-            keepGoing,spot = self.keepGoingMoves(belowOf,enemy)
+            keepGoing,spot = self.keepGoingMoves(belowOf,'x',enemy)
             if keepGoing:
                 possibleMoves.append([aY+(spot+1),aX]) 
         else:
-            spot = self.getOpenSpot(belowOf,acolor)
-            print(belowOf, spot)
-            if spot > 0:
+            keepGoing,spot = self.keepGoingMoves(belowOf,acolor,enemy)
+            if keepGoing:
                 self.flip(aY,aX,aY+(spot),aX,acolor)
 #####################################################333
         diagnolUpRight = []
@@ -97,12 +94,12 @@ class Board:
         if len(diagnolUpRight) > 0:
             diagnolUpRight.pop(0) #Get rid of the piece we started at
         if mode == 'get':
-            keepGoing,spot = self.keepGoingMoves(diagnolUpRight,enemy)
+            keepGoing,spot = self.keepGoingMoves(diagnolUpRight,'x',enemy)
             if keepGoing:
                 possibleMoves.append([aY-(spot+1),aX+(spot+1)])
         else:
-            spot = self.getOpenSpot(diagnolUpRight,acolor)
-            if spot > 0:
+            keepGoing,spot = self.keepGoingMoves(diagnolUpRight,acolor,enemy)
+            if keepGoing:
                 self.flip(aY,aX,aY-(spot),aX+(spot),acolor)
 #####################################################333
         diagnolUpLeft = []
@@ -114,12 +111,12 @@ class Board:
             diagnolUpLeft.pop(0) #Get rid of the piece we started at
         goUDLeft = 0
         if mode == 'get':
-            keepGoing, spot = self.keepGoingMoves(diagnolUpLeft, enemy)
+            keepGoing, spot = self.keepGoingMoves(diagnolUpLeft, 'x',enemy)
             if keepGoing:
                 possibleMoves.append([aY-(spot+1),aX-(spot+1)])
         else:
-            spot = self.getOpenSpot(diagnolUpLeft,acolor)
-            if spot > 0:
+            keepGoing, spot = self.keepGoingMoves(diagnolUpLeft,acolor,enemy)
+            if keepGoing:
                 self.flip(aY,aX,aY-(spot),aX-(spot),acolor)
 
 ####################################################333
@@ -137,12 +134,12 @@ class Board:
             diagnolDownRight.pop(0) #Get rid of the piece we started at
         goDDRight = 0
         if mode == 'get':
-            keepGoing,spot = self.keepGoingMoves(diagnolDownRight,enemy)
+            keepGoing,spot = self.keepGoingMoves(diagnolDownRight, 'x',enemy)
             if keepGoing:
                 possibleMoves.append([aY+(spot+1),aX+(spot+1)]) 
         else:
-            spot = self.getOpenSpot(diagnolDownRight,acolor)
-            if spot > 0:
+            keepGoing,spot = self.keepGoingMoves(diagnolDownRight,acolor,enemy)
+            if keepGoing:
                 self.flip(aY,aX,aY+(spot),aX+(spot),acolor)
 #####################################################333
         diagnolDownLeft = []
@@ -159,12 +156,12 @@ class Board:
             diagnolDownLeft.pop(0) #Get rid of the piece we started at
         goDDLeft = 0
         if mode == 'get':
-            keepGoing,spot = self.keepGoingMoves(diagnolDownLeft,enemy)
+            keepGoing,spot = self.keepGoingMoves(diagnolDownLeft,'x',enemy)
             if keepGoing:
                 possibleMoves.append([aY+(spot+1),aX-(spot+1)])
         else:
-            spot = self.getOpenSpot(diagnolDownLeft,acolor)
-            if spot > 0:
+            keepGoing,spot = self.keepGoingMoves(diagnolDownLeft,acolor,enemy)
+            if keepGoing:
                 self.flip(aY,aX,aY+(spot),aX-(spot),acolor)
         #return this move set per PIECE
         if mode == 'get':
@@ -245,8 +242,8 @@ class Board:
                 return False
         return True
 
-    def keepGoingMoves(self,alist,enemy):
-        spot = self.getOpenSpot(alist,'x')
+    def keepGoingMoves(self,alist,token,enemy):
+        spot = self.getOpenSpot(alist,token)
         keepGoing = self.getOwnPiece(alist,spot,enemy)
         if spot > 0 and keepGoing:
             return True, spot
