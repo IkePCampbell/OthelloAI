@@ -8,7 +8,7 @@ player2 = Player('player2','B')
 playerList = [player1,player2]
 
 print()
-print("Welcome to Othello player")
+print("Welcome to Othello")
 print("To make a move, please enter a desired coordinate in the form of (X,Y)")
 print("To see the rules at anytime, please type 'rules' and you will be directed to the rules page")
 print()
@@ -20,7 +20,6 @@ else:
     print(player2.playerName+", you will go first; your color is Black")
     start = 1
 
-
 playing = True
 #Whoever wins the "coin" flip to start
 currentPlayer = playerList[start]
@@ -29,23 +28,26 @@ while(playing):
     gameBoard.printBoard()
     print('Its',currentPlayer.playerName+"'s turn! ("+currentPlayer.tokenColor+")")
     moveList,canMove = gameBoard.canMove(currentPlayer.tokenColor)
-    invalid = True
-    print(moveList)
-    while invalid:
-        # -- validation of input --
-        tokenXCoord, tokenYCoord =currentPlayer.getMove()
-        #index inside the nested lists
-        testMove = [tokenXCoord, tokenYCoord]
-        if testMove in moveList:
-            invalid = False
-    gameBoard.moves(tokenYCoord,tokenXCoord,currentPlayer.tokenColor,'flip')
-    #switch players
-    if currentPlayerIndex == 0:
-        currentPlayerIndex = 1
+    if canMove != True:
+        print("There are no valid moves for you this turn")
     else:
-        currentPlayerIndex = 0
-    currentPlayer = playerList[currentPlayerIndex] 
-    playing = gameBoard.isNotFull()
+        invalid = True
+        print(moveList)
+        while invalid:
+            # -- validation of input --
+            tokenXCoord, tokenYCoord =currentPlayer.getMove()
+            #-- index inside the nested lists -- 
+            testMove = [tokenXCoord, tokenYCoord]
+            if testMove in moveList:
+                invalid = False
+        gameBoard.moves(tokenYCoord,tokenXCoord,currentPlayer.tokenColor,'flip')
+        #switch players
+        if currentPlayerIndex == 0:
+            currentPlayerIndex = 1
+        else:
+            currentPlayerIndex = 0
+        currentPlayer = playerList[currentPlayerIndex] 
+        playing = gameBoard.isNotFull()
 print("The Game is over!")
 blackScore, whiteScore, winner = gameBoard.score()
 if winner == "Tie":
