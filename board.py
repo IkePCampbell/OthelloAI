@@ -1,11 +1,11 @@
 class Board:
     def __init__(self):
         self.board = [
+        ['W','x','x','x','x','x','x','x'],
+        ['x','W','x','x','x','x','x','x'],
+        ['x','x','W','x','x','x','x','x'],
+        ['x','x','x','B','x','x','x','x'],
         ['x','x','x','x','x','x','x','x'],
-        ['x','x','x','x','x','x','x','x'],
-        ['x','x','x','x','x','x','x','x'],
-        ['x','x','x','B','W','x','x','x'],
-        ['x','x','x','W','B','x','x','x'],
         ['x','x','x','x','x','x','x','x'],
         ['x','x','x','x','x','x','x','x'],   
         ['x','x','x','x','x','x','x','x'],     ]
@@ -86,9 +86,14 @@ class Board:
 #####################################################333
         diagnolUpRight = []
         tmpX = aX
-        for i in range(aY,-1,-1): #get all possible spots above you
-            diagnolUpRight.append(self.board[i][tmpX])
-            tmpX= (tmpX+1)% 8 #because we keep subtracting we eventually run out of room for the list
+        tmpY = aY
+        while (tmpY <  8) and tmpX < 8: #get all possible spots above you
+            try:
+                diagnolUpRight.append(self.board[tmpY][tmpX])
+            except IndexError:
+                pass
+            tmpX+=1 #because we keep subtracting we eventually run out of room for the list
+            tmpY-=1 
         if len(diagnolUpRight) > 0:
             diagnolUpRight.pop(0) #Get rid of the piece we started at
         if mode == 'get':
@@ -194,6 +199,7 @@ class Board:
         return newList
     
     def flip(self,startY,startX,flipY,flipX,acolor):
+        print
         x = startX
         y = startY
         while x != flipX or y != flipY:
