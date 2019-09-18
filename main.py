@@ -50,6 +50,7 @@ while playAgain == True:
             currentPlayerIndex = 0
         currentPlayer = playerList[currentPlayerIndex] 
         playing = gameBoard.isNotFull()
+    gameBoard.printBoard()
     print("The Game is over!")
     blackScore, whiteScore, winner = gameBoard.score()
     if winner == "Tie":
@@ -59,14 +60,13 @@ while playAgain == True:
     print()
     goAgain = input("Would you like to play again? (Y)es or (N)o: ")
     while goAgain not in ["N","Y"]:
-        if goAgain == "N":
-            playAgain = False
-        if goAgain == "Y":
-            gameBoard.reset()
-        else:
-            print("Sorry, I didn't recognize that.")
-            goAgain = input("Would you like to play again? (Y)es or (N)o: ")
-        
+        print("Sorry, I didn't recognize that.")
+        goAgain = input("Would you like to play again? (Y)es or (N)o: ")
+    if goAgain == "N":
+        print("Exiting")
+        playAgain = False
+    elif goAgain == "Y":
+        gameBoard.reset()
 
 
     

@@ -1,14 +1,14 @@
 class Board:
     def __init__(self):
         self.board = [
-        ['W','x','x','x','x','x','x','x'],
-        ['x','W','x','x','x','x','x','x'],
-        ['x','x','W','x','x','x','x','x'],
-        ['x','x','x','B','x','x','x','x'],
-        ['x','x','x','x','x','x','x','x'],
-        ['x','x','x','x','x','x','x','x'],
-        ['x','x','x','x','x','x','x','x'],   
-        ['x','x','x','x','x','x','x','x'],     ]
+        ['x','X','X','X','X','X','X','X'],
+        ['X','x','X','x','X','X','X','X'],
+        ['X','X','X','X','X','X','X','X'],
+        ['X','x','X','B','W','X','X','X'],
+        ['X','X','X','W','B','X','X','X'],
+        ['X','X','X','X','X','X','X','X'],
+        ['X','X','X','X','X','X','X','X'],   
+        ['X','X','X','x','X','X','X','x'],     ]
 
     def canMove(self,acolor):
         moveList = []
@@ -87,7 +87,7 @@ class Board:
         diagnolUpRight = []
         tmpX = aX
         tmpY = aY
-        while (tmpY <  8) and tmpX < 8: #get all possible spots above you
+        while (tmpY > -1) and tmpX < 8: #get all possible spots above you
             try:
                 diagnolUpRight.append(self.board[tmpY][tmpX])
             except IndexError:
@@ -191,7 +191,6 @@ class Board:
         self.board[3][4]='W'
         self.board[4][4]='B'
         self.board[4][3]='W'
-
     def cleanList(self,aList):
         newList = []
         for lists in aList:
