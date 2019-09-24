@@ -1,17 +1,28 @@
 from board import Board
 from player import Player
+from rando import Rando
 import random
 
 gameBoard = Board()
-player1 = Player('player1','B')
-player2 = Player('player2','B')
-playerList = [player1,player2]
 
 print()
 print("Welcome to Othello")
 print("To make a move, please enter a desired coordinate in the form of (X,Y)")
-print("To see the rules at anytime, please type 'rules' and you will be directed to the rules page")
 print()
+
+players = input("How many players are playing, you can have 1 or 2?: ")
+while players.isdigit() == False or players not in ["1","2"]:
+    print("Invalid input")
+    players = input("How many players are playing, you can have 1 or 2?")
+
+if int(players) == 1:
+    player1 = Player('Player','B')
+    player2 = Rando('Random','W')
+else:
+    player1 = Player('Player1','B')
+    player2 = Player('Player','W')
+
+playerList = [player1,player2]
 
 playAgain = True
 while playAgain == True:
@@ -30,11 +41,11 @@ while playAgain == True:
         gameBoard.printBoard()
         print('Its',currentPlayer.playerName+"'s turn! ("+currentPlayer.tokenColor+")")
         moveList,canMove = gameBoard.canMove(currentPlayer.tokenColor)
-        if canMove != True:
+        if canMove == False:
             print("There are no valid moves for you this turn")
         else:
-            invalid = True
             print(moveList)
+            invalid = True
             while invalid:
                 # -- validation of input --
                 tokenXCoord, tokenYCoord =currentPlayer.getMove()
@@ -42,7 +53,10 @@ while playAgain == True:
                 testMove = [tokenXCoord, tokenYCoord]
                 if testMove in moveList:
                     invalid = False
+            if currentPlayer.playerName == "Random":
+                print("They place a piece at "+ str(tokenXCoord),str(tokenYCoord))
             gameBoard.moves(tokenYCoord,tokenXCoord,currentPlayer.tokenColor,'flip')
+            
             #switch players
         if currentPlayerIndex == 0:
             currentPlayerIndex = 1
