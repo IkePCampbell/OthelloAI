@@ -2,6 +2,7 @@ from board import Board
 from player import Player
 from rando import Rando
 import random
+import sys
 
 gameBoard = Board()
 
@@ -44,7 +45,7 @@ while playAgain == True:
         if canMove == False:
             print("There are no valid moves for you this turn")
         else:
-            print(moveList)
+            #print(moveList)
             invalid = True
             while invalid:
                 # -- validation of input --

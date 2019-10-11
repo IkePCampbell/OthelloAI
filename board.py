@@ -171,10 +171,27 @@ class Board:
             return possibleMoves
 #####################################################333
     def printBoard(self):
+        count = 0
+        rowcount = 0
+        print("  X",end="")
+        for i in range(8):
+            print("  "+str(i),end = " ")
+        print()
+        print(" Y "+"+---"*8+"+")
         for row in self.board:
+            print(" "+str(count)+" |",end="")
             for tile in row:
-                print(tile, end = "  ")
-            print()
+                if rowcount < 7:
+                    print(" "+tile,end="  ")
+                else:
+                    print(" "+tile,end=" ")
+                rowcount +=1            
+            print("|")
+            rowcount = 0
+            count +=1
+        print("   "+"+---"*8+"+"+"\n")
+
+        
 #####################################################333  
     def isNotFull(self):
         for rows in self.board:
