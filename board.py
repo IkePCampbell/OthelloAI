@@ -112,7 +112,6 @@ class Board:
             tmpX= (tmpX-1)% 8 #because we keep subtracting we eventually run out of room for the list
         if len(diagnolUpLeft) > 0:
             diagnolUpLeft.pop(0) #Get rid of the piece we started at
-        goUDLeft = 0
         if mode == 'get':
             keepGoing, spot = self.keepGoingMoves(diagnolUpLeft, 'x',enemy)
             if keepGoing:
@@ -135,7 +134,6 @@ class Board:
             tmpY+=1 
         if len(diagnolDownRight) > 0:
             diagnolDownRight.pop(0) #Get rid of the piece we started at
-        goDDRight = 0
         if mode == 'get':
             keepGoing,spot = self.keepGoingMoves(diagnolDownRight, 'x',enemy)
             if keepGoing:
@@ -157,7 +155,6 @@ class Board:
             tmpY +=1
         if len(diagnolDownLeft) > 0:
             diagnolDownLeft.pop(0) #Get rid of the piece we started at
-        goDDLeft = 0
         if mode == 'get':
             keepGoing,spot = self.keepGoingMoves(diagnolDownLeft,'x',enemy)
             if keepGoing:
@@ -256,7 +253,6 @@ class Board:
         return openS
     
     def getOwnPiece(self,alist,spot,enemy):
-        keepGoing = True
         for i in alist[:spot]:
             if i != enemy:
                 return False

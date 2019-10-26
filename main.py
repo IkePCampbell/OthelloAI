@@ -21,7 +21,7 @@ if int(players) == 1:
     player2 = Rando('Random','W')
 else:
     player1 = Player('Player1','B')
-    player2 = Player('Player','W')
+    player2 = Player('Player2','W')
 
 playerList = [player1,player2]
 
@@ -49,13 +49,16 @@ while playAgain == True:
             invalid = True
             while invalid:
                 # -- validation of input --
-                tokenXCoord, tokenYCoord =currentPlayer.getMove()
+                tokenYCoord, tokenXCoord =currentPlayer.getMove()
                 #-- index inside the nested lists -- 
                 testMove = [tokenXCoord, tokenYCoord]
                 if testMove in moveList:
                     invalid = False
+                # -- If there is a false move by the player, not the random agent --    
+                if currentPlayer.playerName != "Random":
+                    print("Sorry, that is not a valid move!\n")
             if currentPlayer.playerName == "Random":
-                print("They place a piece at "+ str(tokenXCoord),str(tokenYCoord))
+                print("They place a piece at "+ str(tokenYCoord)+","+str(tokenXCoord))
             gameBoard.moves(tokenYCoord,tokenXCoord,currentPlayer.tokenColor,'flip')
             
             #switch players
