@@ -190,6 +190,20 @@ class Board:
 
         
 #####################################################333  
+    def createTrainingMap(self,aBoard):
+        parent = []
+        for i in range(len(aBoard)):
+            child = []
+            for j in range(len(aBoard[i])):
+                if self.board[i][j] == 'B':
+                    child.append(1)
+                elif self.board[i][j] == 'W':
+                    child.append(-1)
+                elif self.board[i][j] == 'x':
+                    child.append(0)
+            parent.append(child)
+        return parent
+
     def isNotFull(self):
         for rows in self.board:
             for piece in rows:
@@ -205,6 +219,7 @@ class Board:
         self.board[3][4]='W'
         self.board[4][4]='B'
         self.board[4][3]='W'
+        self.gameHistory = []
     def cleanList(self,aList):
         newList = []
         for lists in aList:
@@ -237,12 +252,15 @@ class Board:
         whiteScore = 64 - blackScore
         if blackScore > whiteScore:
             winner = "Black"
+            winNum = 1
         elif blackScore < whiteScore:
             winner = "White"
+            winNum = -1
         else:
             winner = "Tie"
+            winNum = 0
 
-        return blackScore, whiteScore, winner
+        return blackScore, whiteScore, winner, winNum 
 
     def getOpenSpot(self,alist,piece):
         openS = 0
