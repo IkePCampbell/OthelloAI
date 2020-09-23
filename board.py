@@ -9,6 +9,7 @@ class Board:
         ['x','x','x','x','x','x','x','x'],
         ['x','x','x','x','x','x','x','x'],   
         ['x','x','x','x','x','x','x','x'],     ]
+        
 
     def canMove(self,acolor):
         moveList = []
@@ -112,10 +113,12 @@ class Board:
             tmpX= (tmpX-1)% 8 #because we keep subtracting we eventually run out of room for the list
         if len(diagnolUpLeft) > 0:
             diagnolUpLeft.pop(0) #Get rid of the piece we started at
+        
         if mode == 'get':
             keepGoing, spot = self.keepGoingMoves(diagnolUpLeft, 'x',enemy)
             if keepGoing:
-                possibleMoves.append([aY-(spot+1),aX-(spot+1)])
+                #possibleMoves.append([aY-(spot+1),aX-(spot+1)])
+                possibleMoves.append([aY,aX])
         else:
             keepGoing, spot = self.keepGoingMoves(diagnolUpLeft,acolor,enemy)
             if keepGoing:
@@ -159,6 +162,7 @@ class Board:
             keepGoing,spot = self.keepGoingMoves(diagnolDownLeft,'x',enemy)
             if keepGoing:
                 possibleMoves.append([aY+(spot+1),aX-(spot+1)])
+
         else:
             keepGoing,spot = self.keepGoingMoves(diagnolDownLeft,acolor,enemy)
             if keepGoing:
@@ -192,9 +196,9 @@ class Board:
 #####################################################333  
     def createTrainingMap(self,aBoard):
         parent = []
-        for i in range(len(aBoard)):
+        for i in range(len(aBoard.board)):
             child = []
-            for j in range(len(aBoard[i])):
+            for j in range(len(aBoard.board[i])):
                 if self.board[i][j] == 'B':
                     child.append(1)
                 elif self.board[i][j] == 'W':
