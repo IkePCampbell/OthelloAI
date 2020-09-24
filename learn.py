@@ -6,7 +6,7 @@ class Othello():
         # seeding for random number generation
         np.random.seed(1)
         #converting weights to a 64 by 1 matrix with values from -1 to 1 and mean of 0
-        self.synaptic_weights = 2 * np.random.random((64, size_out)) - 1
+        self.synaptic_weights = 2 * np.random.random((2,1)) - 1
     def sigmoid(self, x):
         #applying the sigmoid function
         return 1/ (1 + np.exp(-x))

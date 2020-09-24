@@ -3,7 +3,7 @@ class Player:
         self.playerName = name
         self.tokenColor = color
 
-    def getMove(self):
+    def getMove(self, *args):
         print("What would you like to do:")
         #give options for either rules or quitting.
         aX = input("Enter a X coordinate for your "+self.tokenColor+": ")

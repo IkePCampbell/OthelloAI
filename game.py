@@ -1,5 +1,7 @@
 from player import Player
 from rando import Rando
+from smartOthello import Smart
+
 import random
 class Game():
     def __init__(self, board):
@@ -12,15 +14,26 @@ class Game():
         self.playAgain = True
         self.gameHistory = []
         self.playersPlaying = None
-        self.humanPlaying = True
+        self.randomPlayers = False
+        self.humanPlaying = False
+        self.othelloAgent= False
         self.noMoves = 0
         self.outPut = []
         self.nnHistory = []
     def welcome(self):
         print("\nWelcome to Othello\nTo make a move, please enter a desired coordinate in the form of (X,Y)\n")
 
-    def selectPlayers(self):
-        if self.humanPlaying != True:
+    def selectPlayers(self,model,test):
+        if self.othelloAgent == True and test == "B":
+            self.player1 = Rando('Random','W')
+            self.player2 = Smart('SmartOthello','B',model)
+
+        elif self.othelloAgent == True and test == "W":
+            self.player1 = Rando('Random','B')
+            self.player2 = Smart('SmartOthello','W',model)
+            self.playersPlaying = 3
+
+        elif self.randomPlayers == True:
             self.player1 = Rando('Random','B')
             self.player2 = Rando('Random','W')
             self.playersPlaying = 3
@@ -72,7 +85,7 @@ class Game():
                     invalid = True
                     while invalid != False:
                         # -- validation of input --
-                        tokenYCoord, tokenXCoord =self.currentPlayer.getMove()
+                        tokenYCoord, tokenXCoord =self.currentPlayer.getMove(moveList)
                         #-- index inside the nested lists -- 
                         testMove = [tokenXCoord, tokenYCoord]
                         if testMove in moveList:
@@ -81,11 +94,11 @@ class Game():
                         if self.currentPlayer.playerName != "Random":
                             print("Sorry, that is not a valid move!\n")
                             self.gameBoard.printBoard()
-                    if self.currentPlayer.playerName == "Random":
+                    if self.currentPlayer.playerName != "Player":
                         if self.humanPlaying == True:
                             print("They place a piece at "+ str(tokenYCoord)+","+str(tokenXCoord))
                     self.gameBoard.moves(tokenYCoord,tokenXCoord,self.currentPlayer.tokenColor,'flip')
-                    self.gameHistory.append(self.gameBoard.createTrainingMap(self.gameBoard))
+                    self.gameHistory.append(testMove)
                     #switch players
                 if self.currentPlayerIndex == 0:
                     self.currentPlayerIndex = 1
@@ -106,9 +119,8 @@ class Game():
             print()
             for gameRound in range(len(self.gameHistory)):
                 result = ""
-                for sublist in self.gameHistory[gameRound]:
-                    for item in sublist:
-                        result += str(item)
+                for item in self.gameHistory[gameRound]:
+                    result += str(item)
                 self.nnHistory.append(list(map(int,result)))
                 self.outPut.append(winNum)
             self.gameHistory = []
@@ -136,8 +148,8 @@ class Game():
         total = 0
         print("Playing",numberOfGames,"games....")
         for i in range(numberOfGames):
-            self.humanPlaying = False
-            self.selectPlayers()
+            self.randomPlayers = True
+            self.selectPlayers(None,None)
             result = self.playOthello()
             print("Completed game", i+1)
             self.gameBoard.reset()
@@ -154,22 +166,34 @@ class Game():
         print('W Wins: ' + str(int(w_wins * 100 / total)) + '%')
         print('Draws: ' + str(int(ties * 100 / total)) + '%')
 
-
-    def simulateManyNeuralNetworkGames(self, nnPlayer, numberOfGames, model):
-        nnPlayerWins = 0
-        randomPlayerWins = 0
-        draws = 0
-        print ("NN player")
-        print (nnPlayer)
+    def simulateNNGames(self, numberOfGames,model,color):
+        b_wins = 0
+        w_wins = 0
+        ties = 0
+        total = 0
+        print("Playing",numberOfGames,"games....")
         for i in range(numberOfGames):
-            self.resetBoard()
-            self.simulateNeuralNetwork(nnPlayer, model)
-            if self.getGameResult() == nnPlayer:
-                nnPlayerWins = nnPlayerWins + 1
-            elif self.getGameResult() == GAME_STATE_DRAW:
-                draws = draws + 1
-            else: randomPlayerWins = randomPlayerWins + 1
-        totalWins = nnPlayerWins + randomPlayerWins + draws
-        print ('X Wins: ' + str(int(nnPlayerWins * 100/totalWins)) + '%')
-        print('O Wins: ' + str(int(randomPlayerWins * 100 / totalWins)) + '%')
-        print('Draws: ' + str(int(draws * 100 / totalWins)) + '%')
+            self.humanPlaying = True
+            self.othelloAgent = True
+            self.selectPlayers(model,color)
+            result = self.playOthello()
+            print("Completed game", i+1)
+            self.gameBoard.reset()
+            if result == 1:
+                b_wins += 1
+            elif result == 2:
+                w_wins+=1
+            else:
+                ties +=1 
+            total +=1
+
+        if color == "B":
+            print("After playing",numberOfGames,"here are the results")
+            print ('The Agent won ' + str(int(b_wins * 100/total)) + '%')
+            print('The Agent lost: ' + str(int(w_wins * 100 / total)) + '%')
+            print('Draws: ' + str(int(ties * 100 / total)) + '%')
+        else:
+            print("After playing",numberOfGames,"here are the results")
+            print ('The Agent won ' + str(int(w_wins * 100/total)) + '%')
+            print('The Agent lost: ' + str(int(b_wins * 100 / total)) + '%')
+            print('Draws: ' + str(int(ties * 100 / total)) + '%')

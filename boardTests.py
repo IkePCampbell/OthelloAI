@@ -9,4 +9,7 @@ class TestBoardMethods(unittest.TestCase):
  #   unittest.main()
 
 board = Board()
+board.printBoard()
 print(board.canMove("B"))
+board.printBoard()
+#print(board.canMove("B"))
