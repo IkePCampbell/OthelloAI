@@ -9,7 +9,7 @@ class Board:
         ['x','x','x','x','x','x','x','x'],
         ['x','x','x','x','x','x','x','x'],   
         ['x','x','x','x','x','x','x','x'],     ]
-        
+
 
     def canMove(self,acolor):
         moveList = []
@@ -50,6 +50,7 @@ class Board:
             if keepGoing:
                 self.flip(aY,aX,aY,aX-(spot),acolor)
 
+
         rightOf = self.board[aY][aX+1:] #have to add 1 to not include the original
         if mode == 'get':
             keepGoing,spot= self.keepGoingMoves(rightOf,'x',enemy)
@@ -88,7 +89,7 @@ class Board:
         diagnolUpRight = []
         tmpX = aX
         tmpY = aY
-        while (tmpY > -1) and tmpX < 8: #get all possible spots above you
+        while (tmpY > -1) and (0 <= tmpX < 8): #get all possible spots above you
             try:
                 diagnolUpRight.append(self.board[tmpY][tmpX])
             except IndexError:
@@ -108,17 +109,23 @@ class Board:
 #####################################################333
         diagnolUpLeft = []
         tmpX = aX
-        for i in range(aY,-1,-1): #get all possible spots above you
-            diagnolUpLeft.append(self.board[i][tmpX])
-            tmpX= (tmpX-1)% 8 #because we keep subtracting we eventually run out of room for the list
+        tmpY = aY
+        
+        while (tmpY > -1) and (0 <= tmpX < 8) : #get all possible spots above you
+            
+            try:
+                diagnolUpLeft.append(self.board[tmpY][tmpX])
+            except IndexError:
+                pass
+            tmpX-=1 #because we keep subtracting we eventually run out of room for the list
+            tmpY-=1 
         if len(diagnolUpLeft) > 0:
             diagnolUpLeft.pop(0) #Get rid of the piece we started at
-        
         if mode == 'get':
             keepGoing, spot = self.keepGoingMoves(diagnolUpLeft, 'x',enemy)
             if keepGoing:
-                #possibleMoves.append([aY-(spot+1),aX-(spot+1)])
-                possibleMoves.append([aY,aX])
+                possibleMoves.append([aY-(spot+1),aX-(spot+1)])
+                
         else:
             keepGoing, spot = self.keepGoingMoves(diagnolUpLeft,acolor,enemy)
             if keepGoing:
@@ -208,7 +215,9 @@ class Board:
             parent.append(child)
         return parent
 
-    def isNotFull(self):
+    def isNotFull(self,noMoves):
+        if noMoves == 2:
+            return False
         for rows in self.board:
             for piece in rows:
                 if piece == 'x':
@@ -231,7 +240,6 @@ class Board:
         return newList
     
     def flip(self,startY,startX,flipY,flipX,acolor):
-        print
         x = startX
         y = startY
         while x != flipX or y != flipY:

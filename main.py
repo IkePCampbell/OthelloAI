@@ -7,4 +7,4 @@ if __name__ == "__main__":
     game.welcome()
     #game.selectPlayers()
     #game.playOthello()
-    game.simulateManyGames(100)
+    game.simulateManyGames(10)

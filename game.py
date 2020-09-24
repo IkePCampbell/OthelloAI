@@ -13,6 +13,7 @@ class Game():
         self.gameHistory = []
         self.playersPlaying = None
         self.humanPlaying = True
+        self.noMoves = 0
 
     def welcome(self):
         print("\nWelcome to Othello\nTo make a move, please enter a desired coordinate in the form of (X,Y)\n")
@@ -33,7 +34,7 @@ class Game():
                 self.player2 = Rando('Random','W')
                 self.playersPlaying = 1
             if int(players) == 2:
-                self.player1 = Player('Player1','B')
+                self.player1 = Player('Player1','W')
                 self.player2 = Player('Player2','B')
                 self.playersPlaying = 2
 
@@ -55,18 +56,20 @@ class Game():
             playing = True
             #Whoever wins the "coin" flip to start
             while(playing):
-                self.gameBoard.printBoard()
+                #self.gameBoard.printBoard() 
                 if self.humanPlaying == True:
+                    self.gameBoard.printBoard()  
                     print('Its',self.currentPlayer.playerName+"'s turn! ("+self.currentPlayer.tokenColor+")")
                 moveList,canMove = self.gameBoard.canMove(self.currentPlayer.tokenColor)
                 if canMove == False:
+                    self.noMoves +=1
                     if self.humanPlaying == True:
                         print("There are no valid moves for you this turn")
                 else:
                     # -- moveList is primarily for debugging, ensures the appropriate moves are available per turn based on pieces -- 
-                    print(moveList)
+                    self.noMoves = 0
                     invalid = True
-                    while invalid:
+                    while invalid != False:
                         # -- validation of input --
                         tokenYCoord, tokenXCoord =self.currentPlayer.getMove()
                         #-- index inside the nested lists -- 
@@ -76,6 +79,7 @@ class Game():
                         # -- If there is a false move by the player, not the random agent --    
                         if self.currentPlayer.playerName != "Random":
                             print("Sorry, that is not a valid move!\n")
+                            self.gameBoard.printBoard()
                     if self.currentPlayer.playerName == "Random":
                         if self.humanPlaying == True:
                             print("They place a piece at "+ str(tokenYCoord)+","+str(tokenXCoord))
@@ -87,7 +91,7 @@ class Game():
                 else:
                     self.currentPlayerIndex = 0
                 self.currentPlayer = self.playerList[self.currentPlayerIndex] 
-                playing = self.gameBoard.isNotFull()
+                playing = self.gameBoard.isNotFull(self.noMoves)
             if self.humanPlaying == True:
                 self.gameBoard.printBoard()
                 print("The Game is over!")
@@ -152,10 +156,12 @@ class Game():
         w_wins = 0
         ties = 0
         total = 0
+        print("Playing",numberOfGames,"games....")
         for i in range(numberOfGames):
             self.humanPlaying = False
             self.selectPlayers()
             result = self.playOthello()
+            print("Completed game", i+1)
             self.gameBoard.reset()
             if result == 1:
                 b_wins += 1
@@ -164,7 +170,8 @@ class Game():
             else:
                 ties +=1 
             total +=1
-            
+
+        print("After playing",numberOfGames,"here are the results")
         print ('B Wins: ' + str(int(b_wins * 100/total)) + '%')
         print('W Wins: ' + str(int(w_wins * 100 / total)) + '%')
         print('Draws: ' + str(int(ties * 100 / total)) + '%')
