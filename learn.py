@@ -1,39 +1,32 @@
-from keras.layers import Dense
-from keras.layers import Dropout
-from keras.models import Sequential
-from keras.utils import to_categorical
 import numpy as np
 
 class Othello():
-    def __init__(self, inputs, outputs, epochs, batchSize):
-        self.epochs = epochs
-        self.batchSize = batchSize
-        self.inputs = inputs
-        self.outputs = outputs
-        self.model = Sequential()
-        self.model.add(Dense(64, activation='relu', input_shape=(inputs, )))
-        self.model.add(Dense(128, activation='relu'))
-        self.model.add(Dense(128, activation='relu'))
-        self.model.add(Dense(128, activation='relu'))
-        self.model.add(Dense(outputs, activation='softmax'))
-        self.model.compile(loss='categorical_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
+    
+    def __init__(self,size_out):
+        # seeding for random number generation
+        np.random.seed(1)
+        #converting weights to a 64 by 1 matrix with values from -1 to 1 and mean of 0
+        self.synaptic_weights = 2 * np.random.random((64, size_out)) - 1
+    def sigmoid(self, x):
+        #applying the sigmoid function
+        return 1 / (1 + np.exp(-x))
+    def sigmoid_derivative(self, x):
+        #computing derivative to the Sigmoid function
+        return x * (1 - x)
+    def train(self, training_inputs, training_outputs, training_iterations):
+        #training the model to make accurate predictions while adjusting weights continually
+        for iteration in range(training_iterations):
+            #siphon the training data via  the neuron
+            output = self.think(training_inputs)
+            #computing error rate for back-propagation
+            error = training_outputs - output
+            #performing weight adjustments
+            adjustments = np.dot(training_inputs.T, error * self.sigmoid_derivative(output))
+            self.synaptic_weights += adjustments
 
-    def train(self, dataset):
-            inputs = []
-            output = []
-            for data in dataset:
-                input.append(data[1])
-                output.append(data[0])
-
-            X = np.array(inputs).reshape((-1, self.inputs))
-            y = to_categorical(output, num_classes=3)
-            # Train and test data split
-            boundary = int(0.8 * len(X))
-            X_train = X[:boundary]
-            X_test = X[boundary:]
-            y_train = y[:boundary]
-            y_test = y[boundary:]
-            self.model.fit(X_train, y_train, validation_data=(X_test, y_test), epochs=self.epochs, batch_size=self.batchSize)
-
-    def predict(self, data, index):
-            return self.model.predict(np.array(data).reshape(-1, self.inputs))[0][index]
+    def think(self, inputs):
+        #passing the inputs via the neuron to get output   
+        #converting values to floats
+        inputs = inputs.astype(float)
+        output = self.sigmoid(np.dot(inputs, self.synaptic_weights))
+        return output

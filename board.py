@@ -209,7 +209,7 @@ class Board:
                 if self.board[i][j] == 'B':
                     child.append(1)
                 elif self.board[i][j] == 'W':
-                    child.append(-1)
+                    child.append(2)
                 elif self.board[i][j] == 'x':
                     child.append(0)
             parent.append(child)
@@ -267,7 +267,7 @@ class Board:
             winNum = 1
         elif blackScore < whiteScore:
             winner = "White"
-            winNum = -1
+            winNum = 2
         else:
             winner = "Tie"
             winNum = 0

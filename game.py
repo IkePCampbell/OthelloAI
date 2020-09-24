@@ -14,7 +14,8 @@ class Game():
         self.playersPlaying = None
         self.humanPlaying = True
         self.noMoves = 0
-
+        self.outPut = []
+        self.nnHistory = []
     def welcome(self):
         print("\nWelcome to Othello\nTo make a move, please enter a desired coordinate in the form of (X,Y)\n")
 
@@ -103,9 +104,14 @@ class Game():
                 if self.humanPlaying == True:
                     print(winner,"wins! Black scored",str(blackScore)+", White Scored",str(whiteScore))
             print()
-            history = []
-            for gameRound in self.gameHistory:
-                history.append((winNum, gameRound))
+            for gameRound in range(len(self.gameHistory)):
+                result = ""
+                for sublist in self.gameHistory[gameRound]:
+                    for item in sublist:
+                        result += str(item)
+                self.nnHistory.append(list(map(int,result)))
+                self.outPut.append(winNum)
+            self.gameHistory = []
             #If there are 2 players we shouldnt prompt
             if self.playersPlaying == 1:
                 goAgain = input("Would you like to play again? (Y)es or (N)o: ")
@@ -120,36 +126,8 @@ class Game():
             else: #implement neural network check here
                 return winNum
 
-
-    def simulateNeuralNetwork(self, nnPlayer, model):
-        playerToMove = PLAYER_X_VAL
-        while (self.getGameResult() == GAME_STATE_NOT_ENDED):
-            availableMoves = self.getAvailableMoves()
-            if playerToMove == nnPlayer:
-                maxValue = 0
-                bestMove = availableMoves[0]
-                for availableMove in availableMoves:
-                    # get a copy of a board
-                    boardCopy = copy.deepcopy(self.board)
-                    boardCopy[availableMove[0]][availableMove[1]] = nnPlayer
-                    if nnPlayer == PLAYER_X_VAL:
-                        value = model.predict(boardCopy, 0)
-                    else:
-                        value = model.predict(boardCopy, 2)
-                    if value > maxValue:
-                        maxValue = value
-                        bestMove = availableMove
-                selectedMove = bestMove
-            else:
-                selectedMove = availableMoves[random.randrange(0, len(availableMoves))]
-            self.move(selectedMove, playerToMove)
-            if playerToMove == PLAYER_X_VAL:
-                playerToMove = PLAYER_O_VAL
-            else:
-                playerToMove = PLAYER_X_VAL
-
     def getTrainingHistory(self):
-        return self.trainingHistory
+        return self.gameHistory
 
     def simulateManyGames(self, numberOfGames):
         b_wins = 0
@@ -165,7 +143,7 @@ class Game():
             self.gameBoard.reset()
             if result == 1:
                 b_wins += 1
-            elif result == -1:
+            elif result == 2:
                 w_wins+=1
             else:
                 ties +=1 
