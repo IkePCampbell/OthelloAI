@@ -2,13 +2,14 @@ from board import Board
 from game import Game
 from learn import Othello
 import numpy as np
+import decimal
 
 if __name__ == "__main__":
     game = Game(Board())
     game.welcome()
     #game.selectPlayers()
     #game.playOthello()
-    game.simulateManyGames(5)
+    game.simulateManyGames(1)
     #game.simulateManyGames(100)
     #game.simulateManyGames(1000)
     #game.simulateManyGames(10000) 
@@ -18,7 +19,7 @@ if __name__ == "__main__":
     print("Random Generated Weights")
     print(OthelloModel.synaptic_weights)
     print("Training")
-    OthelloModel.train(train_in,train_out,500)
+    OthelloModel.train(train_in,train_out,1500)
     print("Weights after training")
     print(OthelloModel.synaptic_weights)
 

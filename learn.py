@@ -9,7 +9,7 @@ class Othello():
         self.synaptic_weights = 2 * np.random.random((64, size_out)) - 1
     def sigmoid(self, x):
         #applying the sigmoid function
-        return 1 / (1 + np.exp(-x))
+        return 1/ (1 + np.exp(-x))
     def sigmoid_derivative(self, x):
         #computing derivative to the Sigmoid function
         return x * (1 - x)
