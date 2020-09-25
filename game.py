@@ -70,7 +70,6 @@ class Game():
             playing = True
             #Whoever wins the "coin" flip to start
             while(playing):
-                #self.gameBoard.printBoard() 
                 if self.humanPlaying == True:
                     self.gameBoard.printBoard()  
                     print('Its',self.currentPlayer.playerName+"'s turn! ("+self.currentPlayer.tokenColor+")")
@@ -91,11 +90,10 @@ class Game():
                         if testMove in moveList:
                             invalid = False
                         # -- If there is a false move by the player, not the random agent --    
-                        if self.currentPlayer.playerName != "Random":
-                            print("Sorry, that is not a valid move!\n")
-                            self.gameBoard.printBoard()
-                    if self.currentPlayer.playerName != "Player":
+                            if self.currentPlayer.playerName== "Player":
+                                print("Sorry, that is not a valid move!\n")
                         if self.humanPlaying == True:
+                            self.gameBoard.printBoard()
                             print("They place a piece at "+ str(tokenYCoord)+","+str(tokenXCoord))
                     self.gameBoard.moves(tokenYCoord,tokenXCoord,self.currentPlayer.tokenColor,'flip')
                     self.gameHistory.append(testMove)
@@ -173,7 +171,6 @@ class Game():
         total = 0
         print("Playing",numberOfGames,"games....")
         for i in range(numberOfGames):
-            self.humanPlaying = True
             self.othelloAgent = True
             self.selectPlayers(model,color)
             result = self.playOthello()
@@ -188,12 +185,12 @@ class Game():
             total +=1
 
         if color == "B":
-            print("After playing",numberOfGames,"here are the results")
-            print ('The Agent won ' + str(int(b_wins * 100/total)) + '%')
+            print("After playing",numberOfGames,"(s) here are the results")
+            print ('The Agent won: ' + str(int(b_wins * 100/total)) + '%')
             print('The Agent lost: ' + str(int(w_wins * 100 / total)) + '%')
             print('Draws: ' + str(int(ties * 100 / total)) + '%')
         else:
-            print("After playing",numberOfGames,"here are the results")
-            print ('The Agent won ' + str(int(w_wins * 100/total)) + '%')
+            print("After playing",numberOfGames,"(s) here are the results")
+            print ('The Agent won:' + str(int(w_wins * 100/total)) + '%')
             print('The Agent lost: ' + str(int(b_wins * 100 / total)) + '%')
             print('Draws: ' + str(int(ties * 100 / total)) + '%')

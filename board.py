@@ -108,7 +108,6 @@ class Board:
             tmpY-=1
         if len(diagnolUpRight) > 0:
             diagnolUpRight.pop(0) #Get rid of the piece we started at
-        print(diagnolUpRight)
         if mode == 'get':
             keepGoing,spot = self.keepGoingMoves(diagnolUpRight,'x',enemy)
             if keepGoing:
@@ -167,13 +166,11 @@ class Board:
         tmpX = aX
         tmpY = aY
 
-        print(tmpX, tmpY)
         while   tmpY < 8 and 0 <= tmpX < 8:
             try:
                 diagnolDownLeft.append(self.board[tmpY][tmpX])
             except IndexError:
                 pass
-            print(tmpX,tmpY)
             tmpX -=1 #because we keep subtracting we eventually run out of room for the list
             tmpY +=1
         if len(diagnolDownLeft) > 0:

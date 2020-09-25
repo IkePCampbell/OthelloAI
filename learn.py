@@ -23,6 +23,7 @@ class Othello():
             #performing weight adjustments
             adjustments = np.dot(training_inputs.T, error * self.sigmoid_derivative(output))
             self.synaptic_weights += adjustments
+            print("Finished Iteration",iteration)
 
     def think(self, inputs):
         #passing the inputs via the neuron to get output   
