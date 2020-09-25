@@ -11,5 +11,7 @@ class TestBoardMethods(unittest.TestCase):
 board = Board()
 board.printBoard()
 print(board.canMove("B"))
+print()
+#board.moves(2,0,"B","flip")
 board.printBoard()
 #print(board.canMove("B"))
